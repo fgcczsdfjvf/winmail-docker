@@ -2,11 +2,9 @@ services:
   - type: web
     name: winmail
     env: docker
-    region: singapore  # 或其他你想要的区域
-    plan: free  # 或其他付费计划
+    plan: free
+    region: singapore
     healthCheckPath: /
     envVars:
       - key: PORT
-        value: 80
-    dockerfilePath: ./Dockerfile
-    dockerCommand: /app/start.sh
+        value: "80"
