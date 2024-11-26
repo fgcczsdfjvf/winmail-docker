@@ -16,10 +16,12 @@ RUN /var/www/html/install.sh
 
 # 配置 Apache
 RUN echo "Listen \${PORT}" > /etc/apache2/ports.conf
-RUN sed -i 's/80/\${PORT}/g' /etc/apache2/sites-available/000-default.conf
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
+RUN a2enmod rewrite
 
 # 设置权限
 RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 755 /var/www/html
 
 # 启动 Apache
-CMD apache2-foreground
+CMD sed -i "s/\${PORT}/$PORT/g" /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf && apache2-foreground
