@@ -1,4 +1,4 @@
-FROM bestwu/winmail:latest
+FROM cloverzrg/winmail-docker:latest
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
