@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # 使用 Release 链接下载文件（替换为你的实际 Release 链接）
-RUN wget [你的GitHub Release下载链接] -O winmail.tar.gz && \
+RUN wget https://github.com/fgcczsdfjvf/winmail-docker/releases/download/release-1.0/winmail-pro-5.2-0524-x86_64.tar.gz -O winmail.tar.gz && \
     tar -xzvf winmail.tar.gz && \
     rm winmail.tar.gz && \
     # 验证文件是否存在
