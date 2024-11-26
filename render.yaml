@@ -4,11 +4,9 @@ services:
     env: docker
     dockerfilePath: ./Dockerfile
     plan: standard
-    ports:
-      - port: 80
-      - port: 110
-      - port: 143
-      - port: 25
-      - port: 465
-      - port: 995
-      - port: 993
+    envVars:
+      - key: PORT
+        value: 80
+    scaling:
+      minInstances: 1
+      maxInstances: 1
