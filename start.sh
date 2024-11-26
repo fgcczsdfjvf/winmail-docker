@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# 启动 Apache
-apache2ctl start
+# 确保Apache监听正确的端口
+sed -i "s/80/8080/g" /etc/apache2/ports.conf
+sed -i "s/80/8080/g" /etc/apache2/sites-enabled/000-default.conf
 
-# 保持容器运行
-tail -f /dev/null
+# 启动Apache
+apache2ctl -D FOREGROUND
