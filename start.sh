@@ -8,4 +8,4 @@ exec docker run \
     -p ${PORT}:80 \
     -e TZ=Asia/Shanghai \
     --name winmail \
-    cloverzrg/winmail-docker:latest
+    ${DOCKER_USERNAME}/winmail-docker:latest
