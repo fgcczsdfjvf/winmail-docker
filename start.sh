@@ -8,4 +8,4 @@ exec docker run \
     -p ${PORT}:80 \
     -e TZ=Asia/Shanghai \
     --name winmail \
-    lixg/winmail:latest
+    bestwu/winmail:latest
