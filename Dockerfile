@@ -1,4 +1,4 @@
-FROM lixg/winmail:latest
+FROM bestwu/winmail:latest
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
