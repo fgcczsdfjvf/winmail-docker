@@ -1,16 +1,26 @@
 FROM debian:bullseye-slim
 
+# 安装必要的依赖
 RUN apt-get update && apt-get install -y \
     wget \
+    procps \
+    net-tools \
+    tar \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# 在容器构建时下载 WinMail
-RUN wget [WinMail官方下载链接]
+# 下载并解压 Winmail Pro 5.2
+RUN wget http://www.winmail.cn/download/WinmailPro-5.2-0524.tar.gz && \
+    tar -zxf WinmailPro-5.2-0524.tar.gz && \
+    rm WinmailPro-5.2-0524.tar.gz
 
-# 添加配置和启动脚本
-COPY start.sh /app/
-RUN chmod +x /app/start.sh
+# 进入 Winmail 目录并安装
+WORKDIR /app/WinmailPro-5.2-0524
+RUN ./install.sh
 
-CMD ["./start.sh"]
+# 暴露需要的端口
+EXPOSE 80 110 143 25 465 995 993
+
+# 启动 Winmail
+CMD ["./winmail", "start"]
