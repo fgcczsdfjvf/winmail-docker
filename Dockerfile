@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     procps \
     net-tools \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -14,33 +15,51 @@ RUN wget https://github.com/fgcczsdfjvf/winmail-docker/releases/download/release
     && tar -xzf winmail-pro-5.2-0524-x86_64.tar.gz \
     && rm winmail-pro-5.2-0524-x86_64.tar.gz
 
+# 创建调试脚本
+RUN echo '#!/bin/bash\n\
+echo "=== System Info ==="\n\
+uname -a\n\
+echo\n\
+echo "=== Network Info ==="\n\
+ip addr\n\
+echo\n\
+echo "=== Port Status ==="\n\
+netstat -tulpn\n\
+echo\n\
+echo "=== Process Status ==="\n\
+ps aux | grep winmail\n\
+' > /app/debug.sh \
+    && chmod +x /app/debug.sh
+
 # 创建启动脚本
-COPY <<'EOF' /app/start.sh
-#!/bin/bash
-set -e
+RUN echo '#!/bin/bash\n\
+set -e\n\
+\n\
+# 运行调试脚本\n\
+/app/debug.sh\n\
+\n\
+cd /app/WinmailPro-5.2-0524\n\
+chmod +x ./install.sh ./winmail\n\
+\n\
+echo "Starting installation..."\n\
+./install.sh\n\
+\n\
+echo "Starting Winmail..."\n\
+./winmail start\n\
+\n\
+# 再次运行调试脚本\n\
+/app/debug.sh\n\
+\n\
+# 检查端口\n\
+echo "Checking ports..."\n\
+netstat -tulpn | grep -E ":80|:25|:110|:143"\n\
+\n\
+# 保持容器运行并输出日志\n\
+tail -f /dev/null\n\
+' > /app/start.sh \
+    && chmod +x /app/start.sh
 
-cd /app/WinmailPro-5.2-0524
-chmod +x ./install.sh ./winmail
-
-echo "Starting installation..."
-./install.sh
-
-echo "Starting Winmail..."
-./winmail start
-
-echo "Checking process status..."
-ps aux | grep winmail
-
-echo "Checking port status..."
-netstat -tulpn
-
-# 保持容器运行
-tail -f /dev/null
-EOF
-
-RUN chmod +x /app/start.sh
-
-# 明确暴露端口
+# 暴露必要的端口
 EXPOSE 80
 EXPOSE 25
 EXPOSE 110
@@ -48,6 +67,7 @@ EXPOSE 143
 
 # 健康检查
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD netstat -tulpn | grep -q ':80' || exit 1
+    CMD curl -f http://localhost:80/ || exit 1
 
+# 设置启动命令
 CMD ["/app/start.sh"]
