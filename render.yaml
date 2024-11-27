@@ -8,3 +8,6 @@ services:
     envVars:
       - key: PORT
         value: "80"
+    ports:
+      - port: 80
+        protocol: TCP
