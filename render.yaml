@@ -11,3 +11,9 @@ services:
     ports:
       - port: 80
         protocol: TCP
+      - port: 25
+        protocol: TCP
+      - port: 110
+        protocol: TCP
+      - port: 143
+        protocol: TCP
