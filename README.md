@@ -1,9 +1,14 @@
 # Winmail Docker
 
-Simple Winmail mail server deployment for Render.
+Winmail mail server deployment configuration.
 
-## Deployment
+## Ports
 
-Click the button below to deploy to Render:
+- 80: Web Interface
+- 25: SMTP
+- 110: POP3
+- 143: IMAP
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+## Environment Variables
+
+- PORT: 80 (default web interface port)
